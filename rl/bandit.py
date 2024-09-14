@@ -1,6 +1,5 @@
 import math
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 
 N_ARMS = 3 # number of sources
 
@@ -17,11 +16,8 @@ class UCBAgent():
             return 10_000
         return self.q[a] + self.c * math.sqrt(math.log(self.t) / self.n[a])
     
-    def get_weights(self): # returns numpy array of weights
-        ucbs = []
-        for a in range(self.k):
-            ucb = self.calculate_ucb(a)
-            ucbs.append(ucb)
+    def get_weights(self): # returns numpy array of weights - normalized from 0 to 1
+        ucbs = [self.calculate_ucb(a) for a in range(self.k)]
         ucbs = np.array(ucbs)
         return ucbs / ucbs.max()
     
