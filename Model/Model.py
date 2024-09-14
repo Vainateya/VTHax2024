@@ -9,6 +9,9 @@ from haystack import Document
 from haystack_integrations.components.retrievers.chroma import ChromaQueryTextRetriever
 from haystack_integrations.document_stores.chroma import ChromaDocumentStore
 
+from rl.bandit import UCBAgent
+from score import top_k_documents
+
 # Chroma is used in-memory so we use the same instances in the two pipelines below (use cosine similarity)
 document_store = ChromaDocumentStore(distance_function="cosine")
 
@@ -55,4 +58,8 @@ for d in results["retriever"]["documents"]:
        "score": d.score, 
        "meta": d.meta
     })
+   
+agent = UCBAgent()
+
+final_documents = top_k_documents(Document_Objects, agent.get_weights(), 10)
     

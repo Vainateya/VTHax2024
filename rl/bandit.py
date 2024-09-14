@@ -1,7 +1,13 @@
 import math
 import numpy as np
 
-N_ARMS = 3 # number of sources
+index = {
+    'ACS Surgery Principles and Practices.pdf': 0,
+    'MayoClinic Preparing For Your Surgery or Procedure.pdf': 1,
+    'NOMESCO Classification of Surgical Procedures.pdf': 2
+}
+
+N_ARMS = len(index) # number of sources
 
 class UCBAgent():
     def __init__(self, c, k=N_ARMS):
@@ -19,9 +25,11 @@ class UCBAgent():
     def get_weights(self): # returns numpy array of weights - normalized from 0 to 1
         ucbs = [self.calculate_ucb(a) for a in range(self.k)]
         ucbs = np.array(ucbs)
-        return ucbs / ucbs.max()
+        ucbs /= ucbs.max()
+        return {name: score for name, score in zip(index.keys(), ucbs)}
     
-    def learn(self, action, reward):
+    def learn(self, source, reward):
+        action = index[source]
         self.n[action] += 1
         self.t += 1
         lr = 1.0 / self.n[action]
