@@ -1,21 +1,15 @@
 import math
 import numpy as np
 
-index = {
-    'ACS Surgery Principles and Practices.pdf': 0,
-    'MayoClinic Preparing For Your Surgery or Procedure.pdf': 1,
-    'NOMESCO Classification of Surgical Procedures.pdf': 2
-}
-
-N_ARMS = len(index) # number of sources
-
 class UCBAgent():
-    def __init__(self, c, k=N_ARMS):
-        self.k = k
+    def __init__(self, sources, c=math.sqrt(2)):
+        self.sources = sources
+        self.N_ARMS = len(self.sources)
         self.c = c
-        self.q = [0] * k
-        self.n = [0] * k
+        self.q = [0] * self.N_ARMS
+        self.n = [0] * self.N_ARMS
         self.t = 1
+        
 
     def calculate_ucb(self, a):
         if self.n[a] == 0:
@@ -26,10 +20,10 @@ class UCBAgent():
         ucbs = [self.calculate_ucb(a) for a in range(self.k)]
         ucbs = np.array(ucbs)
         ucbs /= ucbs.max()
-        return {name: score for name, score in zip(index.keys(), ucbs)}
+        return {name: score for name, score in zip(self.sources.keys(), ucbs)}
     
     def learn(self, source, reward):
-        action = index[source]
+        action = self.sources[source]
         self.n[action] += 1
         self.t += 1
         lr = 1.0 / self.n[action]
