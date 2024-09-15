@@ -8,13 +8,16 @@ export default function HeroHome() {
     { isDisabled: false, content: [{ msg: "", type: "text" }], visible: false },
   ]);
   const [hoveredId, setHoveredId] = useState(-1);
+  const [clicked, setClicked] = useState(-1)
 
   const handleMouseEnter = (id: number) => {
     setHoveredId(id);
+    setClicked(-1);
   };
 
   const handleMouseLeave = () => {
     setHoveredId(-1);
+    setClicked(-1);
   };
 
   // Create refs for textareas
@@ -65,15 +68,16 @@ export default function HeroHome() {
               onMouseLeave={handleMouseLeave}
               style={{ position: "relative", display: "inline" }}
             >
-              <b>{block.msg}</b>
+              <u className={(hoveredId === block.id ? "text-sky-300" : "")}>{block.msg}</u>
               {hoveredId === block.id && (
                 <div
                   style={{ position: "absolute", bottom: "100%", left: "50%" }}
                 >
                   <button
                     type="button"
-                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-1 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    className={"focus:outline-none text-white " + (clicked == 0 ? "bg-green-400 hover:bg-green-400 " : "bg-green-600 hover:bg-green-800") + " font-medium rounded-lg text-sm px-3 py-2 me-2 mb-1"}
                     onClick={() => handleReact(block.msg, 1)}
+                    disabled={clicked == 0}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -92,8 +96,9 @@ export default function HeroHome() {
                   </button>
                   <button
                     type="button"
-                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-1 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                    className={"focus:outline-none text-white " + (clicked == 1 ? "bg-red-400 hover:bg-red-400 " : "bg-red-600 hover:bg-red-800") + " font-medium rounded-lg text-sm px-3 py-2 me-2 mb-1"}
                     onClick={() => handleReact(block.msg, 0)}
+                    disabled={clicked == 1}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -149,6 +154,7 @@ export default function HeroHome() {
   };
 
   const handleReact = async (source: string, reward: number) => {
+    setClicked(reward)
     try {
       const response = await fetch("http://127.0.0.1:5000/react-to-source", {
         method: "POST",
@@ -242,7 +248,7 @@ export default function HeroHome() {
             </div>
           </div>
           <div
-            className="mx-auto w-[90%] shadow-2xl" // Added shadow-2xl here
+            className="mx-auto w-[95%] shadow-2xl" // Added shadow-2xl here
             data-aos="zoom-y-out"
             data-aos-delay={600}
           >
