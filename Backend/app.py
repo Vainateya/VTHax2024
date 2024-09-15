@@ -6,7 +6,7 @@ from rag import RAG
 from rl.bandit import UCBAgent
 
 sources = {
-    'ACS Surgery Principles and Practices': 0,
+    'ACS Surgery Principles an d Practices': 0,
     'MayoClinic Preparing For Your Surgery or Procedure': 1,
     'NOMESCO Classification of Surgical Procedures': 2
 }
@@ -21,6 +21,7 @@ CORS(app)
 @app.route('/your-api-endpoint', methods=['POST'])
 def handle_request():
     data = request.json
+    print(data)
     query = data.get('query', '')
     response = rag.execute_prompt(query)
     return jsonify({
