@@ -20,6 +20,7 @@ class ChromaDB:
 
         HERE = Path(__file__).resolve().parent
         json_paths = [HERE / "../Data" / Path(name) for name in os.listdir("../Data") if name.endswith(".json")]
+        print("docs", json_paths)
 
         def load_json_files(file_paths):
             documents = [] 
@@ -42,6 +43,7 @@ class ChromaDB:
         #indexing.add_component("converter", TextFileToDocument())
         indexing.add_component("writer", DocumentWriter(document_store))
         #indexing.connect("converter", "writer")
+        print(len(documents))
         indexing.run({"writer": {"documents": documents}})
 
         num_chunks = document_store.count_documents()
