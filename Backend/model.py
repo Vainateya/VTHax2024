@@ -7,29 +7,30 @@ API_KEY = get_api_key()
 client = anthropic.Anthropic(api_key=API_KEY)
 
 def query_claude(query, documents):
-    return 'Response hehehe'
-    # #Prepare the context for CLaude, incorporating retrieved documents
-    # text_context = "\n\n".join([f"Document {i+1}: {doc['content']}" for i, doc in enumerate(documents)])
+    # return 'Response hehehe'
+    #Prepare the context for CLaude, incorporating retrieved documents
+    text_context = "\n\n".join([f"Document {i+1}: {doc['content']}" for i, doc in enumerate(documents)])
     
-    # #Prepare the citations
-    # all_citations = [doc['meta'] for doc in documents]
-    # unique_citations = list(set(all_citations))
-    # citations = [f"Source {i+1}: {source}" for i, source in enumerate(unique_citations)]
+    #Prepare the citations
+    all_citations = [doc['meta'] for doc in documents]
+    unique_citations = list(set(all_citations))
+    citations = [f"Source {i+1}: {source}" for i, source in enumerate(unique_citations)]
     
-    # message = client.completions.create(
-    #     model = "claude-3-5-sonnet-20240620",
-    #     max_tokens=1024, #Can be changed later 
-    #     prompt = f"User's query: {query}\nRelevant documents:\n{text_context}\nAnswer the user's question based on the documents."
-    # )
+    message = client.messages.create(
+        model = "claude-3-5-sonnet-20240620",
+        max_tokens=1024, #Can be changed later,
+        messages=[
+            {"role": "user", "content": f"User's query: {query}\nRelevant documents:\n{text_context}\nPlease answer the user's query based on the provided documents\n"}
+        ],
+    )
     
-    # # Claude's response
-    # response = message.completion.strip()
+    # Claude's response
+    response = message.content[0].text
     
-    # # Append citations at the end of the response
-    # citation_text = "\n\n".join(citations)
-    # final_output = f"{response}\n\nCitations:\n{citation_text}"
-    
-    # return final_output
+    # Append citations at the end of the response
+    citation_text = "\n\n".join(citations)
+    final_output = f"{response}\n\nCitations:\n{citation_text}"
+    return final_output
     
 
 

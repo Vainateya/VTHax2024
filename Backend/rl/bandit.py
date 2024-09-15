@@ -17,9 +17,9 @@ class UCBAgent():
         return self.q[a] + self.c * math.sqrt(math.log(self.t) / self.n[a])
     
     def get_weights(self): # returns numpy array of weights - normalized from 0 to 1
-        ucbs = [self.calculate_ucb(a) for a in range(self.k)]
+        ucbs = [self.calculate_ucb(a) for a in range(self.N_ARMS)]
         ucbs = np.array(ucbs)
-        ucbs /= ucbs.max()
+        ucbs = ucbs / ucbs.max()
         return {name: score for name, score in zip(self.sources.keys(), ucbs)}
     
     def learn(self, source, reward):

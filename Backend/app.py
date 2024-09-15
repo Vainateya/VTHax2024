@@ -13,7 +13,7 @@ sources = {
 
 agent = UCBAgent(sources)
 rag = RAG(agent)
-id = 0
+id_val = 0
 
 app = Flask(__name__)
 CORS(app)
@@ -45,15 +45,16 @@ def handle_request():
 def process_response(response):
     res = []
     i = 0
+    global id_val
     while i < len(response):
         for name in sources:
             if response[i:].startswith(name):
                 res.append({
                     'msg': name,
                     'type': 'source',
-                    'id': id
+                    'id': id_val
                 })
-                id += 1
+                id_val += 1
                 i += len(name)
                 break
         else:

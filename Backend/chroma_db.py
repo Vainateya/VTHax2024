@@ -53,7 +53,7 @@ class ChromaDB:
         #Querying Pipeline 
         querying = Pipeline()
         querying.add_component("retriever", ChromaQueryTextRetriever(self.document_store))
-        results = querying.run({"retriever": {"query": query, "top_k": self.num_chunks}})
+        results = querying.run({"retriever": {"query": query, "top_k": self.k}})
 
         docs_with_score = []
 
@@ -80,4 +80,8 @@ class ChromaDB:
                 'meta': chunks[i]['content']
             })
         return res
+    
+
+# db = ChromaDB()
+# print(db.get_documents("What can I expect from my upcoming wisdom teeth removal surgery?"))
     

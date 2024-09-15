@@ -1,5 +1,4 @@
-from rl.bandit import UCBAgent
-from chroma_db import ChromaDB
+from non_haystack import ChromaDB
 from model import query_claude
 
 class RAG:
