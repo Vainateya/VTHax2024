@@ -59,10 +59,9 @@ export default function HeroHome() {
 
   const renderMsg = (content: any) => {
     return content.map(function (block: any) {
-      return (
-        <>
-          {block.type == "source" ? (
-            <div
+      if (block.type === 'source') {
+        return (
+          <div
               key={block.id}
               onMouseEnter={() => handleMouseEnter(block.id)}
               onMouseLeave={handleMouseLeave}
@@ -116,13 +115,18 @@ export default function HeroHome() {
                     </svg>
                   </button>
                 </div>
-              )}
+              )}  
             </div>
-          ) : (
-            block.msg
-          )}
-        </>
-      );
+        )
+      } else if (block.type === 'image') {
+        return (
+          <img src={block.msg} className="h-auto max-w-xl rounded-lg shadow-xl m-2"></img>
+        )
+      } else {
+        return (
+          block.msg
+        )
+      }
     });
   };
 
